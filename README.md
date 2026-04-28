@@ -12,8 +12,8 @@ https://parkerwang312.github.io/SchulteGridGames/
 
 ## 项目内容
 
-- `docs/`：GitHub Pages 发布目录
-- `Web/`：Web 版源码目录
+- `docs/`：Web 版唯一源码目录，也是 GitHub Pages 发布目录
+- `Web/`：本地兼容入口，打开后会跳转到 `docs/`
 - `main.py`：Python Tkinter 桌面版入口
 - `GITHUB_PAGES.md`：GitHub Pages 发布说明
 
@@ -53,8 +53,8 @@ py main.py
 
 可以直接打开下面的文件：
 
-- `Web/index.html`
 - `docs/index.html`
+- `Web/index.html`（会自动跳转到 `docs/index.html`）
 
 如果你希望用本地静态服务访问，也可以在项目根目录执行：
 

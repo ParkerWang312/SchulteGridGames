@@ -2,23 +2,25 @@
 
 这是一个用原生 HTML、CSS、JavaScript 实现的舒尔特方格网页版本，无需构建工具，也没有第三方依赖。
 
-## GitHub Pages 发布建议
+## 单一来源说明
 
-仓库里已经额外整理了一个 `docs/` 目录，适合直接给 GitHub Pages 使用。
+仓库现在已经把 `docs/` 设为网页的唯一来源。
 
-- `Web/`：本地开发和查看用
-- `docs/`：GitHub Pages 发布用
+- `docs/`：唯一需要维护的网页目录
+- `Web/index.html`：兼容入口，会自动跳转到 `docs/index.html`
 
-如果你准备把项目发布到 GitHub Pages，优先使用仓库根目录下的 `docs/`。
+如果你准备修改网页内容，请直接改 `docs/` 里的文件。
 
 ## 使用方式
 
-直接在浏览器中打开 `index.html` 即可运行。
+优先直接打开 `../docs/index.html`。
+
+如果你已经习惯从 `Web/index.html` 进入，也可以继续用，它会自动跳转到 `docs/index.html`。
 
 ## 功能
 
 - 支持 `3 x 3` 到 `10 x 10`
-- 点击“开始游戏”后按顺序找数字
+- 点击“开始训练”后按顺序找数字
 - 支持重新洗牌
 - 实时计时
 - 错误点击提示
@@ -26,6 +28,4 @@
 
 ## 文件说明
 
-- `index.html`：页面结构
-- `styles.css`：界面样式
-- `app.js`：游戏逻辑
+- `index.html`：兼容入口，自动跳转到 `docs/index.html`

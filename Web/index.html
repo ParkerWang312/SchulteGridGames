@@ -3,55 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>舒尔特方格训练</title>
-  <link rel="stylesheet" href="./styles.css">
+  <title>正在跳转到舒尔特方格训练</title>
+  <meta http-equiv="refresh" content="0; url=../docs/index.html">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: "Trebuchet MS", "Microsoft YaHei UI", sans-serif;
+      color: #263640;
+      background: linear-gradient(180deg, #f4ecdf, #e8ddd0);
+    }
+
+    main {
+      max-width: 560px;
+      padding: 28px;
+      border-radius: 18px;
+      background: rgba(255, 250, 242, 0.92);
+      box-shadow: 0 20px 60px rgba(60, 44, 28, 0.12);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    a {
+      color: #ab621b;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="hero">
-      <p class="eyebrow">Schulte Grid</p>
-      <h1>舒尔特方格训练</h1>
-      <p class="hero-copy">从 1 开始按顺序点击数字，支持 3x3 到 10x10，覆盖 100 以内数字训练。</p>
-    </header>
-
-    <main class="game-panel">
-      <section class="toolbar" aria-label="游戏控制区">
-        <label class="field">
-          <span>难度</span>
-          <select id="grid-size" aria-label="选择难度"></select>
-        </label>
-
-        <div class="actions">
-          <button id="start-button" class="button primary" type="button">开始训练</button>
-          <button id="shuffle-button" class="button secondary" type="button">重新洗牌</button>
-        </div>
-      </section>
-
-      <section class="stats" aria-label="游戏信息">
-        <article class="stat-card">
-          <span class="stat-label">用时</span>
-          <strong id="timer">0.00 秒</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">进度</span>
-          <strong id="progress">0 / 25</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">最佳成绩</span>
-          <strong id="best-time">暂无</strong>
-        </article>
-      </section>
-
-      <p id="status" class="status-line">点击“开始训练”后，按顺序找出 1 到 25。</p>
-
-      <section class="board-panel" aria-label="数字区域">
-        <div id="board-shell" class="board-shell">
-          <div id="board" class="board"></div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script src="./app.js"></script>
+  <main>
+    <h1>正在跳转到舒尔特方格训练</h1>
+    <p>网页唯一来源已经切换到 <strong>docs/</strong>。</p>
+    <p>如果没有自动跳转，请点击 <a href="../docs/index.html">这里打开训练页面</a>。</p>
+  </main>
+  <script>
+    window.location.replace("../docs/index.html");
+  </script>
 </body>
 </html>
