@@ -330,143 +330,20 @@ select {
     padding-left: 14px;
     padding-right: 14px;
   }
-
-  .hero {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-
-  .hero-copy {
-    font-size: 0.84rem;
-  }
-
-  .game-panel {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
 }
 
 @media (max-width: 560px) {
-  body::before,
-  body::after {
-    display: none;
-  }
-
-  .app-shell {
-    width: calc(100vw - 10px);
-    height: calc(100vh - 6px);
-    min-height: calc(100vh - 6px);
-    margin: 3px auto;
-  }
-
-  .hero {
-    padding: 10px 12px;
-    border-radius: 18px 18px 12px 12px;
-  }
-
-  .eyebrow {
-    display: none;
-  }
-
-  .hero h1 {
-    font-size: 1.18rem;
-  }
-
-  .hero-copy {
-    display: none;
-  }
-
-  .game-panel {
-    margin-top: 5px;
-    padding: 9px;
-    border-radius: 12px 12px 18px 18px;
-  }
-
-  .toolbar {
-    display: grid;
-    grid-template-columns: minmax(112px, 1fr) auto;
-    align-items: end;
-    gap: 8px;
-  }
-
-  .field {
-    gap: 4px;
-  }
-
-  .field span,
-  .stat-label {
-    font-size: 0.66rem;
-    letter-spacing: 0.05em;
-  }
-
-  select {
-    min-width: 0;
-    width: 100%;
-    padding: 8px 10px;
-  }
-
+  .toolbar,
   .actions {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 6px;
-    min-width: 110px;
-  }
-
-  .button {
-    padding: 10px 12px;
-    font-size: 0.9rem;
-  }
-
-  .stats {
-    gap: 6px;
-    margin-top: 8px;
-  }
-
-  .stat-card {
-    gap: 4px;
-    padding: 8px 9px;
-    border-radius: 12px;
-  }
-
-  .stat-card strong {
-    font-size: 0.88rem;
-  }
-
-  .status-line {
-    margin: 5px 1px 6px;
-    font-size: 0.76rem;
-    line-height: 1.2;
-  }
-
-  .board-panel {
-    flex: none;
-    align-self: center;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    padding: 3px;
-    border-radius: 14px;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .board {
-    gap: 4px;
+    gap: 5px;
   }
 
   .cell {
-    border-radius: 9px;
-  }
-}
-
-@media (max-width: 400px) {
-  .toolbar {
-    grid-template-columns: 1fr;
-  }
-
-  .actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    min-width: 0;
-  }
-
-  .button {
-    font-size: 0.86rem;
+    border-radius: 10px;
   }
 }
