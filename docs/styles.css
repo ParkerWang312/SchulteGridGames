@@ -369,18 +369,16 @@ select {
   }
 
   .hero h1 {
-    font-size: 1.28rem;
+    font-size: 1.18rem;
   }
 
   .hero-copy {
-    margin-top: 4px;
-    font-size: 0.76rem;
-    line-height: 1.35;
+    display: none;
   }
 
   .game-panel {
     margin-top: 5px;
-    padding: 10px;
+    padding: 9px;
     border-radius: 12px 12px 18px 18px;
   }
 
@@ -415,8 +413,8 @@ select {
   }
 
   .button {
-    padding: 8px 10px;
-    font-size: 0.84rem;
+    padding: 10px 12px;
+    font-size: 0.9rem;
   }
 
   .stats {
@@ -435,13 +433,17 @@ select {
   }
 
   .status-line {
-    margin: 6px 1px 8px;
-    font-size: 0.8rem;
-    line-height: 1.25;
+    margin: 5px 1px 6px;
+    font-size: 0.76rem;
+    line-height: 1.2;
   }
 
   .board-panel {
-    padding: 4px;
+    flex: none;
+    align-self: center;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    padding: 3px;
     border-radius: 14px;
   }
 
@@ -465,6 +467,6 @@ select {
   }
 
   .button {
-    font-size: 0.8rem;
+    font-size: 0.86rem;
   }
 }
