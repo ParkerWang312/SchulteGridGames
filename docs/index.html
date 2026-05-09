@@ -9,22 +9,52 @@
 <body>
   <div class="app-shell">
     <header class="hero">
-      <p class="eyebrow">Schulte Grid</p>
+      <p class="eyebrow">Schulte Quest</p>
       <h1>舒尔特方格训练</h1>
-      <p class="hero-copy">从 1 开始按顺序点击数字，支持 3x3 到 10x10，覆盖 100 以内数字训练。</p>
+      <p class="hero-copy">和小队友一起完成数字闯关，用短任务、星星奖励和温和提示，让孩子更愿意反复练习。</p>
     </header>
 
     <main class="game-panel">
       <section class="toolbar" aria-label="游戏控制区">
         <label class="field">
-          <span>难度</span>
-          <select id="grid-size" aria-label="选择难度"></select>
+          <span>关卡</span>
+          <select id="grid-size" aria-label="选择关卡"></select>
+        </label>
+
+        <label class="field toggle-field" for="gentle-hints">
+          <span>轻提示</span>
+          <span class="toggle-row">
+            <input id="gentle-hints" type="checkbox" checked>
+            <span class="toggle-copy">卡住时悄悄提醒</span>
+          </span>
         </label>
 
         <div class="actions">
-          <button id="start-button" class="button primary" type="button">开始训练</button>
+          <button id="start-button" class="button primary" type="button">开始闯关</button>
           <button id="shuffle-button" class="button secondary" type="button">重新洗牌</button>
         </div>
+      </section>
+
+      <section class="mission-strip" aria-label="成长信息">
+        <article class="story-card companion-card">
+          <div class="companion-avatar" aria-hidden="true">猫</div>
+          <div class="story-copy">
+            <span class="story-label">闯关伙伴</span>
+            <strong id="coach-message">准备好了就和我一起找到数字 1。</strong>
+          </div>
+        </article>
+
+        <article class="story-card mission-card">
+          <div class="story-copy">
+            <span class="story-label">今日任务</span>
+            <strong id="mission-name">完成 1 次数字热身</strong>
+            <span id="mission-progress" class="story-meta">今日完成 0 / 3 次</span>
+          </div>
+          <div class="mission-badge">
+            <span class="story-label">连续完成</span>
+            <strong id="streak-count">0 次</strong>
+          </div>
+        </article>
       </section>
 
       <section class="stats" aria-label="游戏信息">
@@ -37,12 +67,12 @@
           <strong id="progress">0 / 25</strong>
         </article>
         <article class="stat-card">
-          <span class="stat-label">最佳成绩</span>
-          <strong id="best-time">暂无</strong>
+          <span class="stat-label">星星收藏</span>
+          <strong id="stars-earned">0 颗</strong>
         </article>
       </section>
 
-      <p id="status" class="status-line">点击“开始训练”后，按顺序找出 1 到 25。</p>
+      <p id="status" class="status-line">点击“开始闯关”后，按顺序找出 1 到 25。</p>
 
       <section class="board-panel" aria-label="数字区域">
         <div id="board-shell" class="board-shell">
