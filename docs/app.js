@@ -63,6 +63,7 @@ init();
 function init() {
   buildSizeOptions();
   bindEvents();
+  resetRunStats();
   updateSummaryForCurrentSize();
   setStatus(INITIAL_STATUS);
   setCoachMessage(getCurrentLevel().intro);
@@ -112,12 +113,15 @@ function handleSizeChange() {
 function updateSummaryForCurrentSize() {
   const todayCount = getTodayProgressCount();
   const currentLevel = getCurrentLevel();
-  progressElement.textContent = `0 / ${totalCount}`;
-  timerElement.textContent = "0.00 秒";
   starsElement.textContent = `${growthProfile.stars} 颗`;
   missionNameElement.textContent = currentLevel.mission;
   missionProgressElement.textContent = `今日完成 ${Math.min(todayCount, DAILY_GOAL)} / ${DAILY_GOAL} 次`;
   streakCountElement.textContent = `${growthProfile.streak} 次`;
+}
+
+function resetRunStats() {
+  progressElement.textContent = `0 / ${totalCount}`;
+  timerElement.textContent = "0.00 秒";
 }
 
 function createGrid() {
@@ -169,7 +173,7 @@ function startGame() {
   hintUsedThisRound = false;
   gameActive = true;
   startTimestamp = performance.now();
-  progressElement.textContent = `0 / ${totalCount}`;
+  resetRunStats();
   setCoachMessage(`我们从 ${nextNumber} 开始，慢一点也没关系。`);
   setStatus(`闯关开始，请先找到数字 ${nextNumber}。`);
   createGrid();
@@ -184,6 +188,7 @@ function shuffleOnly() {
   mistakeCount = 0;
   hintUsedThisRound = false;
   stopTimer();
+  resetRunStats();
   updateSummaryForCurrentSize();
   setCoachMessage("数字位置已经换好了，我们随时可以再来一轮。");
   setStatus(`方格已重新洗牌，点击“${START_BUTTON_TEXT}”后再开始。`);
