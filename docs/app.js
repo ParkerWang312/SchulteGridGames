@@ -1,7 +1,7 @@
 const LEVELS = [
   { size: 3, name: "启航岛", mission: "完成 1 次数字热身", intro: "先从最简单的 1 到 9 开始热身吧。" },
   { size: 4, name: "观察林", mission: "完成 1 次专注观察", intro: "多看一眼，再快一点点。" },
-  { size: 5, name: "侦探营", mission: "完成 1 次数字侦探任务", intro: "这是经典关卡，适合稳定练习。" },
+  { size: 5, name: "侦探营", mission: "完成 1 次数字侦探", intro: "这是经典关卡，适合稳定练习。" },
   { size: 6, name: "闪电湾", mission: "完成 1 次快速搜寻", intro: "找到节奏，别急，越稳越快。" },
   { size: 7, name: "专注塔", mission: "完成 1 次耐心挑战", intro: "眼睛和手一起配合，慢慢也能变快。" },
   { size: 8, name: "探索谷", mission: "完成 1 次高阶探索", intro: "数字变多了，保持专注就能通关。" },
