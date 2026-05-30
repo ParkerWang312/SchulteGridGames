@@ -33,11 +33,60 @@
           </span>
         </label>
 
+        <button id="feedback-toggle" class="button secondary toolbar-feedback-button" type="button" aria-expanded="false" aria-controls="feedback-dialog" aria-haspopup="dialog">建议</button>
+
         <div class="actions">
           <button id="start-button" class="button primary" type="button">开始闯关</button>
           <button id="shuffle-button" class="button secondary" type="button">重新洗牌</button>
         </div>
       </section>
+
+      <dialog id="feedback-dialog" class="feedback-dialog" aria-labelledby="feedback-dialog-title">
+        <section class="feedback-panel" aria-label="建议反馈">
+          <div class="feedback-panel-header">
+            <div class="story-copy feedback-heading">
+              <span class="story-label">建议反馈</span>
+              <strong id="feedback-dialog-title">把你的想法直接发给我</strong>
+            </div>
+          </div>
+
+          <form id="feedback-form" class="feedback-form" novalidate>
+            <label class="field feedback-field" for="feedback-message">
+              <span>你的想法</span>
+              <textarea id="feedback-message" name="message" rows="4" maxlength="1000" placeholder="比如：想加每日挑战、想看更明显的完成奖励、某个按钮不太好点……" required></textarea>
+            </label>
+
+            <div class="feedback-grid">
+              <label class="field feedback-field" for="feedback-device">
+                <span>使用设备</span>
+                <select id="feedback-device" name="device">
+                  <option value="mobile">手机</option>
+                  <option value="tablet">平板</option>
+                  <option value="desktop">电脑</option>
+                  <option value="unknown">不确定</option>
+                </select>
+              </label>
+
+              <label class="field feedback-field" for="feedback-name">
+                <span>昵称</span>
+                <input id="feedback-name" name="name" type="text" maxlength="40" placeholder="选填，方便我在建议里称呼你">
+              </label>
+            </div>
+
+            <div class="feedback-honeypot" aria-hidden="true">
+              <label for="feedback-company">公司</label>
+              <input id="feedback-company" name="company" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <p id="feedback-status" class="feedback-status" aria-live="polite"></p>
+
+            <div class="feedback-actions-row">
+              <button id="feedback-submit" class="button primary" type="submit">发送建议</button>
+              <button id="feedback-cancel" class="button secondary" type="button">稍后再说</button>
+            </div>
+          </form>
+        </section>
+      </dialog>
 
       <section class="mission-strip" aria-label="成长信息">
         <article class="story-card companion-card">

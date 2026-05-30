@@ -12,6 +12,8 @@ const PROFILE_STORAGE_KEY = "schulte-grid-growth-profile";
 const DAILY_GOAL = 3;
 const START_BUTTON_TEXT = "开始闯关";
 const INITIAL_STATUS = "点击“开始闯关”后，按顺序找出 1 到 25。";
+const FEEDBACK_TITLE = "【建议反馈】舒尔特方格训练";
+const FEEDBACK_ENDPOINT = "https://schultegridgames.wanglihua-312.workers.dev/";
 const ENCOURAGEMENTS = [
   "很好，继续按顺序找下一个数字。",
   "你找得很稳，我们继续。",
@@ -35,6 +37,16 @@ const boardShell = document.getElementById("board-shell");
 const board = document.getElementById("board");
 const gridSizeSelect = document.getElementById("grid-size");
 const gentleHintsInput = document.getElementById("gentle-hints");
+const feedbackToggle = document.getElementById("feedback-toggle");
+const feedbackDialog = document.getElementById("feedback-dialog");
+const feedbackForm = document.getElementById("feedback-form");
+const feedbackCancelButton = document.getElementById("feedback-cancel");
+const feedbackMessageInput = document.getElementById("feedback-message");
+const feedbackDeviceInput = document.getElementById("feedback-device");
+const feedbackNameInput = document.getElementById("feedback-name");
+const feedbackCompanyInput = document.getElementById("feedback-company");
+const feedbackSubmitButton = document.getElementById("feedback-submit");
+const feedbackStatusElement = document.getElementById("feedback-status");
 const startButton = document.getElementById("start-button");
 const shuffleButton = document.getElementById("shuffle-button");
 const timerElement = document.getElementById("timer");
@@ -55,6 +67,7 @@ let hintTimerId = null;
 let gameActive = false;
 let mistakeCount = 0;
 let hintUsedThisRound = false;
+let isFeedbackSubmitting = false;
 let growthProfile = loadGrowthProfile();
 const boardResizeObserver = new ResizeObserver(resizeBoard);
 
@@ -62,6 +75,7 @@ init();
 
 function init() {
   buildSizeOptions();
+  configureFeedbackDialog();
   bindEvents();
   resetRunStats();
   updateSummaryForCurrentSize();
@@ -93,7 +107,198 @@ function bindEvents() {
   startButton.addEventListener("click", startGame);
   shuffleButton.addEventListener("click", shuffleOnly);
   gentleHintsInput.addEventListener("change", handleHintModeChange);
+  feedbackToggle.addEventListener("click", openFeedbackDialog);
+  feedbackCancelButton.addEventListener("click", closeFeedbackDialog);
+  feedbackForm.addEventListener("submit", handleFeedbackSubmit);
+  feedbackDialog.addEventListener("close", syncFeedbackDialogState);
   window.addEventListener("resize", resizeBoard);
+}
+
+function configureFeedbackDialog() {
+  feedbackForm.reset();
+  feedbackDeviceInput.value = detectDeviceType();
+  setFeedbackStatus("");
+  syncFeedbackDialogState();
+}
+
+function openFeedbackDialog() {
+  setFeedbackStatus("");
+  feedbackDeviceInput.value = detectDeviceType();
+  if (!feedbackDialog.open) {
+    feedbackDialog.showModal();
+  }
+  syncFeedbackDialogState();
+  window.setTimeout(() => {
+    feedbackMessageInput.focus();
+  }, 0);
+}
+
+function closeFeedbackDialog() {
+  if (isFeedbackSubmitting) {
+    return;
+  }
+
+  if (!feedbackDialog.open) {
+    syncFeedbackDialogState();
+    return;
+  }
+  feedbackDialog.close();
+}
+
+function syncFeedbackDialogState() {
+  feedbackToggle.setAttribute("aria-expanded", feedbackDialog.open ? "true" : "false");
+}
+
+function finishFeedbackSuccess(message) {
+  feedbackForm.reset();
+  feedbackDeviceInput.value = detectDeviceType();
+  setFeedbackStatus("");
+  setFeedbackSubmitting(false);
+  window.alert(message);
+  if (feedbackDialog.open) {
+    feedbackDialog.close();
+  }
+  syncFeedbackDialogState();
+}
+
+async function handleFeedbackSubmit(event) {
+  event.preventDefault();
+
+  if (isFeedbackSubmitting) {
+    return;
+  }
+
+  const message = feedbackMessageInput.value.trim();
+  if (!message) {
+    setFeedbackStatus("先写下你的想法，我再帮你发送。", true);
+    feedbackMessageInput.focus();
+    return;
+  }
+
+  if (feedbackCompanyInput.value.trim()) {
+    finishFeedbackSuccess("建议已发送，谢谢。");
+    return;
+  }
+
+  const payload = {
+    title: FEEDBACK_TITLE,
+    message,
+    nickname: feedbackNameInput.value.trim(),
+    device: getDeviceLabel(feedbackDeviceInput.value),
+    deviceType: feedbackDeviceInput.value,
+    deviceLabel: getDeviceLabel(feedbackDeviceInput.value),
+    level: getCurrentLevel().name,
+    currentLevel: getCurrentLevel().name,
+    levelName: getCurrentLevel().name,
+    size: `${currentSize} x ${currentSize}`,
+    gridSize: currentSize,
+    boardSize: currentSize,
+    currentGridSize: currentSize,
+    gentleHints: gentleHintsInput.checked ? "开启" : "关闭",
+    gentleHintsEnabled: gentleHintsInput.checked,
+    company: feedbackCompanyInput.value.trim(),
+    browser: detectBrowserName(),
+    page: `${document.title} (${window.location.href})`,
+    pageUrl: window.location.href,
+    pageTitle: document.title,
+    ua: navigator.userAgent,
+    userAgent: navigator.userAgent,
+    viewport: `${window.innerWidth}x${window.innerHeight}`,
+    submittedAt: new Date().toISOString()
+  };
+
+  setFeedbackSubmitting(true);
+  setFeedbackStatus("正在发送建议…");
+
+  try {
+    const response = await fetch(FEEDBACK_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+    const responseBody = await readFeedbackResponse(response);
+
+    if (!response.ok || responseBody?.ok === false) {
+      throw new Error(responseBody?.message || "发送失败，请稍后再试。");
+    }
+
+    finishFeedbackSuccess(responseBody?.message || "建议已发送，谢谢。", false);
+    return;
+  } catch (error) {
+    setFeedbackStatus(error instanceof Error ? error.message : "发送失败，请稍后再试。", true);
+  } finally {
+    if (isFeedbackSubmitting) {
+      setFeedbackSubmitting(false);
+    }
+  }
+}
+
+async function readFeedbackResponse(response) {
+  const contentType = response.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    return response.json();
+  }
+
+  const text = await response.text();
+  if (!text) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { message: text };
+  }
+}
+
+function setFeedbackSubmitting(isSubmitting) {
+  isFeedbackSubmitting = isSubmitting;
+  feedbackForm.setAttribute("aria-busy", String(isSubmitting));
+  feedbackSubmitButton.disabled = isSubmitting;
+  feedbackCancelButton.disabled = isSubmitting;
+  feedbackMessageInput.disabled = isSubmitting;
+  feedbackDeviceInput.disabled = isSubmitting;
+  feedbackNameInput.disabled = isSubmitting;
+  feedbackCompanyInput.disabled = isSubmitting;
+}
+
+function setFeedbackStatus(message, isError = false) {
+  feedbackStatusElement.textContent = message;
+  feedbackStatusElement.dataset.state = message ? (isError ? "error" : "success") : "idle";
+}
+
+function detectDeviceType() {
+  if (window.matchMedia("(max-width: 560px)").matches) {
+    return "mobile";
+  }
+
+  if (window.matchMedia("(max-width: 900px)").matches) {
+    return "tablet";
+  }
+
+  return "desktop";
+}
+
+function detectBrowserName() {
+  const userAgent = navigator.userAgent;
+  const browserMatch = userAgent.match(/(Edg|OPR|Chrome|Safari|Firefox)\/[^\s]+/);
+  return browserMatch ? browserMatch[0].replace("Edg", "Edge").replace("OPR", "Opera") : "";
+}
+
+function getDeviceLabel(device) {
+  switch (device) {
+    case "mobile":
+      return "手机";
+    case "tablet":
+      return "平板";
+    case "desktop":
+      return "电脑";
+    default:
+      return "不确定";
+  }
 }
 
 function handleSizeChange() {
