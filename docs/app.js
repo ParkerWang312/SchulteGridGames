@@ -13,7 +13,8 @@ const DAILY_GOAL = 3;
 const START_BUTTON_TEXT = "开始闯关";
 const INITIAL_STATUS = "点击“开始闯关”后，按顺序找出 1 到 25。";
 const FEEDBACK_TITLE = "【建议反馈】舒尔特方格训练";
-const FEEDBACK_ENDPOINT = "https://schultegridgames.wanglihua-312.workers.dev/";
+const FEEDBACK_ENDPOINT = "https://feedback.ksjbm.com/";
+const FEEDBACK_TIMEOUT_MS = 8000;
 const ENCOURAGEMENTS = [
   "很好，继续按顺序找下一个数字。",
   "你找得很稳，我们继续。",
@@ -211,13 +212,20 @@ async function handleFeedbackSubmit(event) {
   setFeedbackStatus("正在发送建议…");
 
   try {
+    const feedbackRequestController = new AbortController();
+    const feedbackRequestTimeoutId = window.setTimeout(() => {
+      feedbackRequestController.abort();
+    }, FEEDBACK_TIMEOUT_MS);
+
     const response = await fetch(FEEDBACK_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: feedbackRequestController.signal
     });
+    window.clearTimeout(feedbackRequestTimeoutId);
     const responseBody = await readFeedbackResponse(response);
 
     if (!response.ok || responseBody?.ok === false) {
@@ -227,6 +235,16 @@ async function handleFeedbackSubmit(event) {
     finishFeedbackSuccess(responseBody?.message || "建议已发送，谢谢。", false);
     return;
   } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      setFeedbackStatus("反馈服务连接超时，请稍后再试或切换网络。", true);
+      return;
+    }
+
+    if (error instanceof TypeError && /Failed to fetch/i.test(error.message)) {
+      setFeedbackStatus("反馈服务当前不可达，请稍后再试。", true);
+      return;
+    }
+
     setFeedbackStatus(error instanceof Error ? error.message : "发送失败，请稍后再试。", true);
   } finally {
     if (isFeedbackSubmitting) {
